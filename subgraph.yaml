@@ -1,0 +1,55 @@
+specVersion: 0.0.2
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum/contract
+    name: OceanStaking
+    network: mainnet
+    source:
+      address: '0x6F1E92fb8a685AaA0710BAD194D7B1aa839F7F8a'
+      abi: OceanStaking
+      startBlock: 14229889
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      entities:
+        - Approval
+        - Deposit
+        - Transfer
+        - Withdraw
+      abis:
+        - name: OceanStaking
+          file: ./abis/OceanStaking.json
+      eventHandlers:
+        - event: Approval(indexed address,indexed address,uint256)
+          handler: handleApproval
+        - event: Deposit(indexed address,uint256,uint256)
+          handler: handleDeposit
+        - event: Reward(indexed address,uint256)
+          handler: handleReward
+        - event: Transfer(indexed address,indexed address,uint256)
+          handler: handleTransfer
+        - event: Withdraw(indexed address,uint256,uint256)
+          handler: handleWithdraw
+      file: ./src/OceanStaking.ts
+  - kind: ethereum/contract
+    name: BSTToken
+    network: mainnet
+    source:
+      address: '0x509A38b7a1cC0dcd83Aa9d06214663D9eC7c7F4a'
+      abi: BSTToken
+      startBlock: 4917826
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      entities:
+        - Transfer
+      abis:
+        - name: BSTToken
+          file: ./abis/BSTToken.json
+      eventHandlers:
+        - event: Transfer(indexed address,indexed address,uint256)
+          handler: handleTransfer
+      file: ./src/BSTToken.ts

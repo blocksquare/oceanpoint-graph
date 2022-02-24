@@ -1,0 +1,56 @@
+type User @entity {
+  id: ID!
+  stakingPools: [StakingPoolUser!] @derivedFrom(field: "user")
+  tokens: [TokenHolder!] @derivedFrom(field: "user")
+}
+
+type StakingPool @entity {
+  id: ID!
+  sAmount: BigInt!
+  amountStaked: BigInt!
+  ratio: BigDecimal!
+  currentAmount: BigInt!
+  totalDepositAmount: BigInt!
+  totalRewards: BigInt!
+  totalWithdrawAmount: BigInt!
+  poolUsers: [StakingPoolUser!] @derivedFrom(field: "pool")
+  stats: [StakingPoolStats!] @derivedFrom(field: "pool")
+}
+
+type StakingPoolStats @entity {
+  id: ID!
+  date: Int!
+  sAmount: BigInt!
+  amountStaked: BigInt!
+  ratio: BigDecimal!
+  currentAmount: BigInt!
+  totalDepositAmount: BigInt!
+  totalRewards: BigInt!
+  totalWithdrawAmount: BigInt!
+  pool: StakingPool!
+}
+
+type StakingPoolUser @entity {
+  id: ID!
+  sAmount: BigInt!
+  lockedUntil: BigInt!
+  pool: StakingPool!
+  user: User!
+}
+
+type Token @entity {
+  id: ID!
+  name: String!
+  symbol: String!
+  totalSupply: BigInt!
+  totalTransfers: BigInt!
+  totalHolders: BigInt!
+  holders: [TokenHolder!] @derivedFrom(field: "token")
+}
+
+type TokenHolder @entity {
+  id: ID!
+  amount: BigInt!
+  token: Token!
+  user: User!
+}
